@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For Yamini Didu 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    font-family:Segoe UI, sans-serif;
+    background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+    color:#fff;
+    text-align:center;
+    overflow-x:hidden;
+}
+section{ padding:60px 20px; }
+h1,h2{ margin-bottom:20px; }
+
+button{
+    padding:15px 30px;
+    border:none;
+    border-radius:30px;
+    background:#ff3366;
+    color:#fff;
+    font-size:18px;
+    cursor:pointer;
+    box-shadow:0 5px 15px rgba(0,0,0,0.3);
+    transition:0.3s;
+}
+button:hover{ transform:scale(1.05); }
+
+.hidden{ display:none; }
+
+/* Floating hearts */
+.heart{
+    position:fixed;
+    bottom:-20px;
+    color:#ff3366;
+    animation:float 6s linear infinite;
+}
+@keyframes float{
+    0%{transform:translateY(0);opacity:0;}
+    30%{opacity:1;}
+    100%{transform:translateY(-110vh);opacity:0;}
+}
+
+/* Gallery */
+.gallery{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:15px;
+}
+.gallery img{
+    width:100%;
+    border-radius:20px;
+    box-shadow:0 10px 20px rgba(0,0,0,0.3);
+}
+
+/* Music */
+.song{
+    background:rgba(255,255,255,0.25);
+    padding:15px;
+    margin:15px auto;
+    border-radius:20px;
+    max-width:320px;
+}
+audio{ width:100%; }
+</style>
+</head>
+
+<body>
+
+<!-- Scene 1 -->
+<section>
+<h1>💖 Yamini Didu 💖</h1>
+<p>
+Aaj shayad phone nahi utha pa rahi ho…<br>
+par mera dil har second aapko yaad kar raha hai 🥺<br><br>
+Galti hui hai, maanta hoon…<br>
+par pyaar kabhi kam nahi hua ❤️
+</p>
+<button onclick="showSection('scene2')">Click for You 💌</button>
+</section>
+
+<!-- Scene 2 -->
+<section id="scene2" class="hidden">
+<h2>Just for You 🌸</h2>
+
+<div class="gallery">
+<img src="https://i.postimg.cc/FzW0hZP9/IMG-20231202-152316.jpg">
+<img src="https://i.postimg.cc/HxSrMLb7/IMG-20231202-151233.jpg">
+<img src="https://i.postimg.cc/Ls8Y8fZb/280520025-522665416029037-7976751419016493000-n-Copy.jpg">
+<img src="https://i.postimg.cc/j5JjDhqB/329682408-744628647177571-6437862681133081594-n.jpg">
+<img src="https://i.postimg.cc/J402ZdCb/IMG-20230820-175339-Copy.jpg">
+</div>
+
+<br>
+<button onclick="showSection('scene3')">Music for My Heart 🎶</button>
+</section>
+
+<!-- Scene 3 -->
+<section id="scene3" class="hidden">
+<h2>Feel These Songs ❤️</h2>
+
+<div class="song">
+<p>🎵 Romantic Piano</p>
+<audio controls>
+    <source src="songs/song1.mp3" type="audio/mpeg">
+</audio>
+</div>
+
+<div class="song">
+<p>🎵 Love Melody</p>
+<audio controls>
+    <source src="songs/song2.mp3" type="audio/mpeg">
+</audio>
+</div>
+
+<div class="song">
+<p>🎵 Soft Heartbeat</p>
+<audio controls>
+    <source src="songs/song3.mp3" type="audio/mpeg">
+</audio>
+</div>
+
+<br>
+<button onclick="showSection('scene4')">One Last Thing 🥺</button>
+</section>
+
+<!-- Scene 4 -->
+<section id="scene4" class="hidden">
+<h2>From My Heart 💔</h2>
+<p>
+Main perfect nahi hoon…<br>
+par mera pyaar saccha hai ❤️<br><br>
+Agar aaj naraz ho,<br>
+to bhi kal ka intezar karunga…<br>
+kyunki <b>Yamini didu meri duniya ho</b> 🌍
+</p>
+<button onclick="showSection('scene5')">Message Me 💬</button>
+</section>
+
+<!-- Scene 5 -->
+<section id="scene5" class="hidden">
+<h2>Just One Message 💖</h2>
+<a href="https://wa.me/917018403933?text=Yamini%20didu%2C%20please%20maan%20jao%20🥺%20I%20miss%20you" target="_blank">
+<button>Open WhatsApp 💚</button>
+</a>
+<p style="margin-top:20px;">
+Ek message hi kaafi hai…<br>
+sab theek ho jayega 🌸
+</p>
+</section>
+
+<script>
+function showSection(id){
+    document.getElementById(id).classList.remove("hidden");
+    document.getElementById(id).scrollIntoView({behavior:"smooth"});
+}
+
+// Only one song at a time
+document.querySelectorAll("audio").forEach(a=>{
+    a.addEventListener("play",()=>{
+        document.querySelectorAll("audio").forEach(b=>{
+            if(b!==a) b.pause();
+        });
+    });
+});
+
+// Floating Hearts
+setInterval(()=>{
+    const h=document.createElement("div");
+    h.className="heart";
+    h.innerHTML="❤";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=(18+Math.random()*22)+"px";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),6000);
+},350);
+</script>
+
+</body>
+</html>
