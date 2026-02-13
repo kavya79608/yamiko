@@ -14,8 +14,25 @@ body{
     text-align:center;
     overflow-x:hidden;
 }
-section{ padding:60px 20px; }
+
+section{
+    padding:60px 20px;
+    opacity:0;
+    transform:translateY(40px);
+    transition:0.8s;
+}
+section.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
 h1,h2{ margin-bottom:20px; }
+
+.glow{
+    text-shadow:0 0 10px #fff,
+                0 0 20px #ff3366,
+                0 0 40px #ff3366;
+}
 
 button{
     padding:15px 30px;
@@ -27,16 +44,21 @@ button{
     cursor:pointer;
     box-shadow:0 5px 15px rgba(0,0,0,0.3);
     transition:0.3s;
+    animation:pulse 2s infinite;
 }
 button:hover{ transform:scale(1.05); }
 
+@keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(255,51,102,.7);}
+    70%{box-shadow:0 0 0 15px rgba(255,51,102,0);}
+    100%{box-shadow:0 0 0 0 rgba(255,51,102,0);}
+}
+
 .hidden{ display:none; }
 
-/* Floating hearts */
 .heart{
     position:fixed;
     bottom:-20px;
-    color:#ff3366;
     animation:float 6s linear infinite;
 }
 @keyframes float{
@@ -45,7 +67,6 @@ button:hover{ transform:scale(1.05); }
     100%{transform:translateY(-110vh);opacity:0;}
 }
 
-/* Gallery */
 .gallery{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
@@ -55,9 +76,12 @@ button:hover{ transform:scale(1.05); }
     width:100%;
     border-radius:20px;
     box-shadow:0 10px 20px rgba(0,0,0,0.3);
+    transition:0.4s;
+}
+.gallery img:hover{
+    transform:scale(1.08);
 }
 
-/* Music */
 .song{
     background:rgba(255,255,255,0.25);
     padding:15px;
@@ -66,20 +90,34 @@ button:hover{ transform:scale(1.05); }
     max-width:320px;
 }
 audio{ width:100%; }
+
+/* Countdown box */
+.memory{
+    margin-top:20px;
+    font-size:18px;
+    opacity:0.95;
+    line-height:1.6;
+}
 </style>
 </head>
 
 <body>
 
 <!-- Scene 1 -->
-<section>
-<h1>💖 Yamini Didu 💖</h1>
+<section class="show">
+<h1 class="glow">💖 Yamini Didu 💖</h1>
 <p>
 Aaj shayad phone nahi utha pa rahi ho…<br>
 par mera dil har second aapko yaad kar raha hai 🥺<br><br>
 Galti hui hai, maanta hoon…<br>
 par pyaar kabhi kam nahi hua ❤️
 </p>
+
+<div class="memory">
+Last time baat hui thi: <b>17 January</b> 💔<br>
+<span id="daysCounter"></span>
+</div>
+
 <button onclick="showSection('scene2')">Click for You 💌</button>
 </section>
 
@@ -106,21 +144,21 @@ par pyaar kabhi kam nahi hua ❤️
 <div class="song">
 <p>🎵 Romantic Piano</p>
 <audio controls>
-    <source src="song1.mp3" type="audio/mpeg">
+    <source src="songs/song1.mp3" type="audio/mpeg">
 </audio>
 </div>
 
 <div class="song">
 <p>🎵 Love Melody</p>
 <audio controls>
-    <source src="song2.mp3" type="audio/mpeg">
+    <source src="songs/song2.mp3" type="audio/mpeg">
 </audio>
 </div>
 
 <div class="song">
 <p>🎵 Soft Heartbeat</p>
 <audio controls>
-    <source src="song3.mp3" type="audio/mpeg">
+    <source src="songs/song3.mp3" type="audio/mpeg">
 </audio>
 </div>
 
@@ -134,9 +172,10 @@ par pyaar kabhi kam nahi hua ❤️
 <p>
 Main perfect nahi hoon…<br>
 par mera pyaar saccha hai ❤️<br><br>
-Agar aaj naraz ho,<br>
-to bhi kal ka intezar karunga…<br>
-kyunki <b>Yamini didu meri duniya ho</b> 🌍
+Agar aaj naraz ho…<br>
+to main kal bhi yahi rahunga 🥺<br><br>
+kyunki <b>Yamini didu sirf meri didu nahi…<br>
+meri aadat ho 🌸</b>
 </p>
 <button onclick="showSection('scene5')">Message Me 💬</button>
 </section>
@@ -155,11 +194,24 @@ sab theek ho jayega 🌸
 
 <script>
 function showSection(id){
-    document.getElementById(id).classList.remove("hidden");
-    document.getElementById(id).scrollIntoView({behavior:"smooth"});
+    const el=document.getElementById(id);
+    el.classList.remove("hidden");
+    setTimeout(()=>{ el.classList.add("show"); },50);
+    el.scrollIntoView({behavior:"smooth"});
 }
 
-// Only one song at a time
+/* Days since 17 January */
+function daysSince(){
+    const lastDate = new Date("2026-01-17");
+    const today = new Date();
+    const diff = today - lastDate;
+    const days = Math.floor(diff / (1000*60*60*24));
+    document.getElementById("daysCounter").innerHTML =
+        "17 January se aaj tak: <b>"+days+" din</b> 💔";
+}
+daysSince();
+
+/* Only one song at a time */
 document.querySelectorAll("audio").forEach(a=>{
     a.addEventListener("play",()=>{
         document.querySelectorAll("audio").forEach(b=>{
@@ -168,11 +220,12 @@ document.querySelectorAll("audio").forEach(a=>{
     });
 });
 
-// Floating Hearts
+/* Floating hearts */
+const hearts=["❤","💖","💗","💓","💕"];
 setInterval(()=>{
     const h=document.createElement("div");
     h.className="heart";
-    h.innerHTML="❤";
+    h.innerHTML=hearts[Math.floor(Math.random()*hearts.length)];
     h.style.left=Math.random()*100+"vw";
     h.style.fontSize=(18+Math.random()*22)+"px";
     document.body.appendChild(h);
@@ -182,4 +235,3 @@ setInterval(()=>{
 
 </body>
 </html>
-
